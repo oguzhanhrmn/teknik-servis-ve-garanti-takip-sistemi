@@ -42,11 +42,18 @@ public class AccountController : Controller
             return View(model);
         }
 
+        var roleName = "User";
+        var roleEntity = user.Role;
+        if (roleEntity != null && !string.IsNullOrWhiteSpace(roleEntity.RoleName))
+        {
+            roleName = roleEntity.RoleName;
+        }
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.RoleId.ToString())
+            new Claim(ClaimTypes.Role, roleName)
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

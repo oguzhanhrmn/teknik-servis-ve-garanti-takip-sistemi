@@ -7,7 +7,7 @@ namespace TSGTS.WebUI.Controllers.Api;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class DashboardController : ControllerBase
 {
     private readonly IGenericRepository<ServiceTicket> _ticketRepo;
