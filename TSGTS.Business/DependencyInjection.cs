@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.AddScoped<ICustomerService, CustomerManager>();
         services.AddScoped<IDeviceService, DeviceManager>();
         services.AddScoped<ITicketService, TicketManager>();
+        services.AddScoped<ITicketStatusService, TicketStatusManager>();
 
         return services;
     }

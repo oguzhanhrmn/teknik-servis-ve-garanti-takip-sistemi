@@ -17,5 +17,7 @@ public class MappingProfile : Profile
         CreateMap<ServiceTicket, ServiceTicketDto>().ReverseMap();
         CreateMap<ServiceTicketCreateDto, ServiceTicket>()
             .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(_ => DateTime.UtcNow));
+
+        CreateMap<TicketStatus, TicketStatusDto>().ReverseMap();
     }
 }
