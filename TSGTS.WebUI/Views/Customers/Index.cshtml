@@ -1,0 +1,40 @@
+@model IEnumerable<TSGTS.Core.DTOs.CustomerDto>
+@{
+    ViewData["Title"] = "Müşteriler";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Müşteriler</h2>
+    <a class="btn btn-primary" asp-action="Create">Yeni Müşteri</a>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Telefon</th>
+            <th>E-posta</th>
+            <th>Vergi No</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td>@item.Phone</td>
+            <td>@item.Email</td>
+            <td>@item.TaxNo</td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Id">Düzenle</a>
+                <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Silinsin mi?');">Sil</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
