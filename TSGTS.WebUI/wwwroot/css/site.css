@@ -29,3 +29,25 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+#layout-shell {
+  min-height: 100vh;
+}
+
+#sidebar {
+  width: 240px;
+}
+
+#sidebar .nav-link {
+  padding: 10px 16px;
+  border-radius: 0;
+}
+
+#sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.stat-card {
+  border: none;
+  border-radius: 12px;
+}

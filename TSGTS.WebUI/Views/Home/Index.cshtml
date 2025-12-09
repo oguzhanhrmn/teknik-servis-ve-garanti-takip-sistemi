@@ -1,8 +1,77 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-1">Toplam Kayıt</h6>
+                <div class="h3" id="stat-totalTickets">-</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-1">Toplam Müşteri</h6>
+                <div class="h3" id="stat-totalCustomers">-</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm stat-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-1">Toplam Cihaz</h6>
+                <div class="h3" id="stat-totalDevices">-</div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title">Durum Dağılımı</h5>
+        <canvas id="statusChart" height="120"></canvas>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch("/api/dashboard/stats", { credentials: "include" });
+                if (!response.ok) throw new Error("Yetki veya veri hatası");
+                const data = await response.json();
+
+                document.getElementById("stat-totalTickets").innerText = data.totalTickets ?? "-";
+                document.getElementById("stat-totalCustomers").innerText = data.totalCustomers ?? "-";
+                document.getElementById("stat-totalDevices").innerText = data.totalDevices ?? "-";
+
+                const labels = data.statusCounts.map(s => "Durum " + s.statusId);
+                const values = data.statusCounts.map(s => s.count);
+
+                const ctx = document.getElementById("statusChart");
+                new Chart(ctx, {
+                    type: "doughnut",
+                    data: {
+                        labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: ["#3498db", "#f1c40f", "#9b59b6", "#2ecc71", "#95a5a6", "#e74c3c"]
+                        }]
+                    },
+                    options: {
+                        plugins: {
+                            legend: {
+                                position: "bottom"
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    </script>
+}
