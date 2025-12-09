@@ -1,0 +1,42 @@
+@model TSGTS.Core.DTOs.DeviceCreateDto
+@{
+    ViewData["Title"] = "Cihaz Düzenle";
+    var deviceId = ViewBag.DeviceId as int?;
+}
+
+<h2>Cihaz Düzenle</h2>
+<hr />
+
+<form asp-action="Edit" asp-route-id="@deviceId" method="post" class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="SerialNumber" class="form-label"></label>
+        <input asp-for="SerialNumber" class="form-control" />
+        <span asp-validation-for="SerialNumber" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="BrandId" class="form-label"></label>
+        <input asp-for="BrandId" class="form-control" />
+        <span asp-validation-for="BrandId" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="ModelId" class="form-label"></label>
+        <input asp-for="ModelId" class="form-control" />
+        <span asp-validation-for="ModelId" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="PurchaseDate" class="form-label"></label>
+        <input asp-for="PurchaseDate" class="form-control" type="date" />
+        <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="WarrantyEndDate" class="form-label"></label>
+        <input asp-for="WarrantyEndDate" class="form-control" type="date" />
+        <span asp-validation-for="WarrantyEndDate" class="text-danger"></span>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </div>
+</form>
+
+<partial name="_ValidationScriptsPartial" />
