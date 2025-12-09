@@ -19,6 +19,7 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: var(--bg-body, #f5f7fb);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -30,6 +31,79 @@ body {
   text-align: start;
 }
 
+#layout-shell {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+#sidebar {
+  width: 240px;
+}
+
+#sidebar .nav-link {
+  padding: 10px 16px;
+  border-radius: 0;
+}
+
+#sidebar .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.stat-card {
+  border: none;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+:root {
+  --primary: #2563eb;
+  --accent: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --panel: #ffffff;
+  --bg-body: #f5f7fb;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline-secondary {
+  color: var(--text-primary);
+}
+
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+
+.table > thead {
+  background: #eef2ff;
+}
+
+.table > tbody > tr:hover {
+  background: #f8fafc;
+}
+
+.hero {
+  background: linear-gradient(135deg, rgba(37,99,235,0.9), rgba(16,185,129,0.85)), url('/img/dashboard-hero.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.hero .lead {
+  color: #e5e7eb;
+}
 #layout-shell {
   min-height: 100vh;
 }
