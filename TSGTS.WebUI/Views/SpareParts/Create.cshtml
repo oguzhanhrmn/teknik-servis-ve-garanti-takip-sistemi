@@ -1,0 +1,43 @@
+@model TSGTS.Core.DTOs.SparePartCreateDto
+@{
+    ViewData["Title"] = "Yeni Yedek Parça";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Yeni Yedek Parça</h4>
+        <form asp-action="Create" method="post" class="row g-3 mt-2">
+            <div class="col-md-6">
+                <label asp-for="PartName" class="form-label"></label>
+                <input asp-for="PartName" class="form-control" />
+                <span asp-validation-for="PartName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="PartCode" class="form-label"></label>
+                <input asp-for="PartCode" class="form-control" />
+                <span asp-validation-for="PartCode" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="StockQuantity" class="form-label"></label>
+                <input asp-for="StockQuantity" class="form-control" />
+                <span asp-validation-for="StockQuantity" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="CriticalLevel" class="form-label"></label>
+                <input asp-for="CriticalLevel" class="form-control" />
+                <span asp-validation-for="CriticalLevel" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="UnitPrice" class="form-label"></label>
+                <input asp-for="UnitPrice" class="form-control" />
+                <span asp-validation-for="UnitPrice" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />
