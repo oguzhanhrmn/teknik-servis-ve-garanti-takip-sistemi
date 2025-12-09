@@ -19,6 +19,9 @@ public static class DependencyInjection
         services.AddScoped<ITicketService, TicketManager>();
         services.AddScoped<ITicketStatusService, TicketStatusManager>();
         services.AddScoped<ISparePartService, SparePartManager>();
+        services.AddScoped<IInvoiceService, InvoiceManager>();
+        services.AddScoped<IPaymentService, PaymentManager>();
+        services.AddScoped<IPaymentTypeService, PaymentTypeManager>();
 
         return services;
     }

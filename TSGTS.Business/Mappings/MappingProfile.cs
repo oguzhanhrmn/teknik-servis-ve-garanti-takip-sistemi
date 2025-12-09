@@ -22,5 +22,13 @@ public class MappingProfile : Profile
 
         CreateMap<SparePart, SparePartDto>().ReverseMap();
         CreateMap<SparePartCreateDto, SparePart>();
+
+        CreateMap<Invoice, InvoiceDto>().ReverseMap();
+        CreateMap<InvoiceCreateDto, Invoice>();
+
+        CreateMap<Payment, PaymentDto>().ReverseMap();
+        CreateMap<PaymentCreateDto, Payment>();
+
+        CreateMap<PaymentType, PaymentTypeDto>().ReverseMap();
     }
 }

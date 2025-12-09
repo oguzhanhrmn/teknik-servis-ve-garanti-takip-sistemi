@@ -1,0 +1,41 @@
+@model TSGTS.Core.DTOs.PaymentCreateDto
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    ViewData["Title"] = "Yeni Ödeme";
+    var invoices = ViewBag.Invoices as List<SelectListItem> ?? new();
+    var paymentTypes = ViewBag.PaymentTypes as List<SelectListItem> ?? new();
+}
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">Yeni Ödeme</h4>
+        <form asp-action="Create" method="post" class="row g-3 mt-2">
+            <div class="col-md-4">
+                <label class="form-label" for="InvoiceId">Fatura</label>
+                <select asp-for="InvoiceId" asp-items="invoices" class="form-select"></select>
+                <span asp-validation-for="InvoiceId" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label" for="PaymentTypeId">Ödeme Tipi</label>
+                <select asp-for="PaymentTypeId" asp-items="paymentTypes" class="form-select"></select>
+                <span asp-validation-for="PaymentTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Amount" class="form-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Date" class="form-label"></label>
+                <input asp-for="Date" type="date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<partial name="_ValidationScriptsPartial" />

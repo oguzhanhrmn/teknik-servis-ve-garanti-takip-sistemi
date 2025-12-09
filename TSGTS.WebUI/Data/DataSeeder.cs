@@ -16,6 +16,15 @@ public static class DataSeeder
             await context.SaveChangesAsync();
         }
 
+        if (!context.PaymentTypes.Any())
+        {
+            context.PaymentTypes.AddRange(
+                new PaymentType { TypeName = "Nakit" },
+                new PaymentType { TypeName = "Kredi Kartı" },
+                new PaymentType { TypeName = "Havale/EFT" });
+            await context.SaveChangesAsync();
+        }
+
         if (!context.TicketStatuses.Any())
         {
             context.TicketStatuses.AddRange(
