@@ -33,16 +33,20 @@ namespace TSGTS.DataAccess.Migrations
                     b.Property<string>("ActionDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("IslemAciklamasi");
 
                     b.Property<int>("TicketId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KayitId");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ZamanDamgasi");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KullaniciId");
 
                     b.HasKey("Id");
 
@@ -50,7 +54,7 @@ namespace TSGTS.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ActionLogs");
+                    b.ToTable("IslemLoglari", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Assignment", b =>
@@ -62,13 +66,16 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AssignedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("AtamaTarihi");
 
                     b.Property<int>("TechnicianId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TeknisyenId");
 
                     b.Property<int>("TicketId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KayitId");
 
                     b.HasKey("Id");
 
@@ -76,7 +83,7 @@ namespace TSGTS.DataAccess.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Assignments");
+                    b.ToTable("Atamalar", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Brand", b =>
@@ -90,11 +97,12 @@ namespace TSGTS.DataAccess.Migrations
                     b.Property<string>("BrandName")
                         .IsRequired()
                         .HasMaxLength(75)
-                        .HasColumnType("nvarchar(75)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasColumnName("MarkaAdi");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Markalar", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Category", b =>
@@ -108,11 +116,12 @@ namespace TSGTS.DataAccess.Migrations
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasMaxLength(75)
-                        .HasColumnType("nvarchar(75)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasColumnName("KategoriAdi");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Kategoriler", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Customer", b =>
@@ -128,26 +137,31 @@ namespace TSGTS.DataAccess.Migrations
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Eposta");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(75)
-                        .HasColumnType("nvarchar(75)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasColumnName("Ad");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(75)
-                        .HasColumnType("nvarchar(75)");
+                        .HasColumnType("nvarchar(75)")
+                        .HasColumnName("Soyad");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("Telefon");
 
                     b.Property<string>("TaxNo")
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("VergiNo");
 
                     b.HasKey("Id");
 
@@ -155,7 +169,7 @@ namespace TSGTS.DataAccess.Migrations
                         .IsUnique()
                         .HasFilter("[TaxNo] IS NOT NULL");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Musteriler", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Device", b =>
@@ -167,21 +181,26 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BrandId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MarkaId");
 
                     b.Property<int>("ModelId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ModelId");
 
                     b.Property<DateTime?>("PurchaseDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("SatinAlmaTarihi");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("SeriNo");
 
                     b.Property<DateTime?>("WarrantyEndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("GarantiBitisTarihi");
 
                     b.HasKey("Id");
 
@@ -192,7 +211,7 @@ namespace TSGTS.DataAccess.Migrations
                     b.HasIndex("SerialNumber")
                         .IsUnique();
 
-                    b.ToTable("Devices");
+                    b.ToTable("Cihazlar", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Invoice", b =>
@@ -204,28 +223,34 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Indirim");
 
                     b.Property<decimal>("FinalAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("NetTutar");
 
                     b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("FaturaTarihi");
 
                     b.Property<decimal>("TaxAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("KDV");
 
                     b.Property<int>("TicketId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KayitId");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("ToplamTutar");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Faturalar", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.LaborRate", b =>
@@ -237,16 +262,18 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("HourlyRate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("SaatlikUcret");
 
                     b.Property<string>("ServiceType")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("HizmetTuru");
 
                     b.HasKey("Id");
 
-                    b.ToTable("LaborRates");
+                    b.ToTable("IscilikUcretleri", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Model", b =>
@@ -258,15 +285,18 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BrandId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MarkaId");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KategoriId");
 
                     b.Property<string>("ModelName")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("ModelAdi");
 
                     b.HasKey("Id");
 
@@ -274,7 +304,7 @@ namespace TSGTS.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Models");
+                    b.ToTable("Modeller", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Payment", b =>
@@ -286,16 +316,20 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Tutar");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Tarih");
 
                     b.Property<int>("InvoiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FaturaId");
 
                     b.Property<int>("PaymentTypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OdemeTipiId");
 
                     b.HasKey("Id");
 
@@ -303,7 +337,7 @@ namespace TSGTS.DataAccess.Migrations
 
                     b.HasIndex("PaymentTypeId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Odemeler", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.PaymentType", b =>
@@ -317,11 +351,12 @@ namespace TSGTS.DataAccess.Migrations
                     b.Property<string>("TypeName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("TipAdi");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentTypes");
+                    b.ToTable("OdemeTipleri", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.Role", b =>
@@ -333,16 +368,18 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Aciklama");
 
                     b.Property<string>("RoleName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("RolAdi");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roller", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.ServicePartUsage", b =>
@@ -354,16 +391,20 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("PartId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ParcaId");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Miktar");
 
                     b.Property<int>("TicketId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KayitId");
 
                     b.Property<DateTime>("UsedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("KullanimTarihi");
 
                     b.HasKey("Id");
 
@@ -371,7 +412,7 @@ namespace TSGTS.DataAccess.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("ServicePartUsages");
+                    b.ToTable("ServisParcaKullanimlari", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.ServiceTicket", b =>
@@ -383,23 +424,29 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("OlusturmaTarihi");
 
                     b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MusteriId");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("Aciklama");
 
                     b.Property<int>("DeviceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CihazId");
 
                     b.Property<int>("OpenedByUserId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AcanKullaniciId");
 
                     b.Property<int>("StatusId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DurumId");
 
                     b.HasKey("Id");
 
@@ -411,7 +458,7 @@ namespace TSGTS.DataAccess.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("ServiceTickets");
+                    b.ToTable("ServisKayitlari", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.SparePart", b =>
@@ -423,30 +470,35 @@ namespace TSGTS.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CriticalLevel")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KritikSeviye");
 
                     b.Property<string>("PartCode")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ParcaKodu");
 
                     b.Property<string>("PartName")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("ParcaAdi");
 
                     b.Property<int>("StockQuantity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StokMiktari");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("BirimFiyat");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PartCode")
                         .IsUnique();
 
-                    b.ToTable("SpareParts");
+                    b.ToTable("YedekParcalar", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.TicketStatus", b =>
@@ -459,16 +511,18 @@ namespace TSGTS.DataAccess.Migrations
 
                     b.Property<string>("ColorCode")
                         .HasMaxLength(7)
-                        .HasColumnType("nvarchar(7)");
+                        .HasColumnType("nvarchar(7)")
+                        .HasColumnName("RenkKodu");
 
                     b.Property<string>("StatusName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("DurumAdi");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TicketStatuses");
+                    b.ToTable("ServisDurumlari", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.User", b =>
@@ -482,23 +536,28 @@ namespace TSGTS.DataAccess.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Eposta");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Aktif");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("SifreOzeti");
 
                     b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RolId");
 
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("KullaniciAdi");
 
                     b.HasKey("Id");
 
@@ -507,7 +566,7 @@ namespace TSGTS.DataAccess.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Kullanicilar", (string)null);
                 });
 
             modelBuilder.Entity("TSGTS.Core.Entities.ActionLog", b =>
