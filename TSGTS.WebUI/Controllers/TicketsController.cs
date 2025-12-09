@@ -5,6 +5,7 @@ using TSGTS.WebUI.Models;
 
 namespace TSGTS.WebUI.Controllers;
 
+[Microsoft.AspNetCore.Authorization.Authorize]
 public class TicketsController : Controller
 {
     private readonly ITicketService _ticketService;

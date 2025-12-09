@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TSGTS.DataAccess.Repositories;
 using TSGTS.WebUI.Models;
@@ -18,6 +19,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login(string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
@@ -26,6 +28,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
@@ -33,7 +36,7 @@ public class AccountController : Controller
             return View(model);
 
         var user = (await _userRepository.FindAsync(u => u.Username == model.Username && u.IsActive)).FirstOrDefault();
-        if (user is null || user.PasswordHash != model.Password)
+        if (user is null || user.PasswordHash != TSGTS.Business.Security.PasswordHasher.Hash(model.Password))
         {
             ModelState.AddModelError(string.Empty, "Geçersiz kullanıcı adı veya şifre.");
             return View(model);

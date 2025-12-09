@@ -6,6 +6,7 @@ namespace TSGTS.WebUI.Controllers.Api;
 
 [ApiController]
 [Route("api/[controller]")]
+[Microsoft.AspNetCore.Authorization.Authorize]
 public class TicketsController : ControllerBase
 {
     private readonly ITicketService _ticketService;

@@ -4,6 +4,7 @@ using TSGTS.Core.DTOs;
 
 namespace TSGTS.WebUI.Controllers;
 
+[Microsoft.AspNetCore.Authorization.Authorize]
 public class DevicesController : Controller
 {
     private readonly IDeviceService _deviceService;
