@@ -10,7 +10,7 @@ public class TsgtsDbContextFactory : IDesignTimeDbContextFactory<TsgtsDbContext>
         var optionsBuilder = new DbContextOptionsBuilder<TsgtsDbContext>();
 
         var connectionString = Environment.GetEnvironmentVariable("TSGTS_ConnectionString") ??
-                               "Server=(localdb)\\MSSQLLocalDB;Database=TSGTS;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
+                               "Server=localhost\\SQLEXPRESS01;Database=TSGTS;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True";
 
         optionsBuilder.UseSqlServer(connectionString);
 
