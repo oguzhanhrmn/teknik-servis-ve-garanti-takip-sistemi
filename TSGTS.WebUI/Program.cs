@@ -2,11 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using TSGTS.DataAccess;
 using TSGTS.DataAccess.Repositories;
 using TSGTS.Business;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddFluentValidationAutoValidation()
+    .AddFluentValidationClientsideAdapters();
 builder.Services.AddDbContext<TsgtsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
