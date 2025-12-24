@@ -3,20 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TSGTS</title>
+    <title>@ViewData["Title"] - TSGTS Paneli</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TSGTS.WebUI.styles.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
     <div class="d-flex" id="layout-shell">
         <nav id="sidebar" class="bg-dark text-white">
             <div class="sidebar-header px-3 py-3">
-                <a class="navbar-brand text-white fw-bold" asp-area="" asp-controller="Home" asp-action="Index">TSGTS</a>
+                <a class="navbar-brand text-white fw-bold" asp-area="" asp-controller="Home" asp-action="Index">TSGTS Paneli</a>
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                    <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Kontrol Paneli</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" asp-area="" asp-controller="Customers" asp-action="Index">Müşteriler</a>
@@ -32,6 +33,7 @@
 
         <div class="flex-grow-1 d-flex flex-column">
             <header class="navbar navbar-expand bg-white border-bottom shadow-sm px-3">
+                <div class="fw-semibold text-primary">Kontrol Paneli</div>
                 <div class="ms-auto d-flex align-items-center gap-3">
                     @if (User?.Identity?.IsAuthenticated ?? false)
                     {
@@ -53,7 +55,6 @@
         </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

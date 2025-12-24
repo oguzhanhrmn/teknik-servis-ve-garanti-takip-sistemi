@@ -23,6 +23,13 @@ public class CustomersController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string q)
+    {
+        var result = await _customerService.SearchAsync(q ?? string.Empty);
+        return Ok(result);
+    }
+
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Get(int id)
     {
@@ -32,20 +39,22 @@ public class CustomersController : ControllerBase
         return Ok(customer);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CustomerCreateDto dto)
-    {
-        var created = await _customerService.CreateAsync(dto);
-        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
-    }
+[HttpPost]
+[Consumes("application/json", "application/x-www-form-urlencoded", "multipart/form-data")]
+public async Task<IActionResult> Create([FromForm] CustomerCreateDto dto)
+{
+    var created = await _customerService.CreateAsync(dto);
+    return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+}
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, [FromBody] CustomerCreateDto dto)
-    {
-        var updated = await _customerService.UpdateAsync(id, dto);
-        if (updated is null)
-            return NotFound();
-        return Ok(updated);
+[HttpPut("{id:int}")]
+[Consumes("application/json", "application/x-www-form-urlencoded", "multipart/form-data")]
+public async Task<IActionResult> Update(int id, [FromForm] CustomerCreateDto dto)
+{
+    var updated = await _customerService.UpdateAsync(id, dto);
+    if (updated is null)
+        return NotFound();
+    return Ok(updated);
     }
 
     [HttpDelete("{id:int}")]

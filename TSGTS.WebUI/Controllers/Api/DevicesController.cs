@@ -32,20 +32,22 @@ public class DevicesController : ControllerBase
         return Ok(device);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] DeviceCreateDto dto)
-    {
-        var created = await _deviceService.CreateAsync(dto);
-        return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
-    }
+[HttpPost]
+[Consumes("application/json", "application/x-www-form-urlencoded", "multipart/form-data")]
+public async Task<IActionResult> Create([FromForm] DeviceCreateDto dto)
+{
+    var created = await _deviceService.CreateAsync(dto);
+    return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
+}
 
-    [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, [FromBody] DeviceCreateDto dto)
-    {
-        var updated = await _deviceService.UpdateAsync(id, dto);
-        if (updated is null)
-            return NotFound();
-        return Ok(updated);
+[HttpPut("{id:int}")]
+[Consumes("application/json", "application/x-www-form-urlencoded", "multipart/form-data")]
+public async Task<IActionResult> Update(int id, [FromForm] DeviceCreateDto dto)
+{
+    var updated = await _deviceService.UpdateAsync(id, dto);
+    if (updated is null)
+        return NotFound();
+    return Ok(updated);
     }
 
     [HttpDelete("{id:int}")]

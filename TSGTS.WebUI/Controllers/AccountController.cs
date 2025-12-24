@@ -1,4 +1,4 @@
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -12,10 +12,12 @@ namespace TSGTS.WebUI.Controllers;
 public class AccountController : Controller
 {
     private readonly IGenericRepository<User> _userRepository;
+    private readonly IGenericRepository<Role> _roleRepository;
 
-    public AccountController(IGenericRepository<User> userRepository)
+    public AccountController(IGenericRepository<User> userRepository, IGenericRepository<Role> roleRepository)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;
     }
 
     [HttpGet]
@@ -24,6 +26,13 @@ public class AccountController : Controller
     {
         ViewData["ReturnUrl"] = returnUrl;
         return View(new LoginViewModel());
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 
     [HttpPost]
@@ -43,10 +52,13 @@ public class AccountController : Controller
         }
 
         var roleName = "User";
-        var roleEntity = user.Role;
-        if (roleEntity != null && !string.IsNullOrWhiteSpace(roleEntity.RoleName))
+        if (user.RoleId > 0)
         {
-            roleName = roleEntity.RoleName;
+            var roleEntity = await _roleRepository.GetByIdAsync(user.RoleId);
+            if (roleEntity != null && !string.IsNullOrWhiteSpace(roleEntity.RoleName))
+            {
+                roleName = roleEntity.RoleName;
+            }
         }
 
         var claims = new List<Claim>

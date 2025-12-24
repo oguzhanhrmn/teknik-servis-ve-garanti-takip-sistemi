@@ -1,4 +1,5 @@
 @model TSGTS.Core.DTOs.DeviceCreateDto
+@using Microsoft.AspNetCore.Mvc.Rendering
 @{
     ViewData["Title"] = "Cihaz Düzenle";
     var deviceId = ViewBag.DeviceId as int?;
@@ -14,13 +15,13 @@
         <span asp-validation-for="SerialNumber" class="text-danger"></span>
     </div>
     <div class="col-md-3">
-        <label asp-for="BrandId" class="form-label"></label>
-        <input asp-for="BrandId" class="form-control" />
+        <label asp-for="BrandId" class="form-label">Marka</label>
+        <select asp-for="BrandId" class="form-select" asp-items="@(ViewBag.Brands as List<SelectListItem>)"></select>
         <span asp-validation-for="BrandId" class="text-danger"></span>
     </div>
     <div class="col-md-3">
-        <label asp-for="ModelId" class="form-label"></label>
-        <input asp-for="ModelId" class="form-control" />
+        <label asp-for="ModelId" class="form-label">Model</label>
+        <select asp-for="ModelId" class="form-select" asp-items="@(ViewBag.Models as List<SelectListItem>)"></select>
         <span asp-validation-for="ModelId" class="text-danger"></span>
     </div>
     <div class="col-md-6">

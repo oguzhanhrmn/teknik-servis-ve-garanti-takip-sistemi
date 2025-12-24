@@ -101,6 +101,10 @@ body {
 .hero .lead {
   color: #e5e7eb;
 }
+#statusChart {
+  max-height: 220px;
+  width: 100%;
+}
 #layout-shell {
   min-height: 100vh;
 }

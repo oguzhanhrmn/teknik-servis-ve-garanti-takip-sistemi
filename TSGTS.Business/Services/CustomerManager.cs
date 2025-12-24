@@ -23,6 +23,23 @@ public class CustomerManager : ICustomerService
         return _mapper.Map<IEnumerable<CustomerDto>>(customers);
     }
 
+    public async Task<IEnumerable<CustomerDto>> SearchAsync(string term)
+    {
+        term = term?.Trim() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(term))
+            return await GetAllAsync();
+
+        term = term.ToLowerInvariant();
+        var filtered = await _repository.FindAsync(c =>
+            c.FirstName.ToLower().Contains(term) ||
+            c.LastName.ToLower().Contains(term) ||
+            c.Phone.ToLower().Contains(term) ||
+            c.Email.ToLower().Contains(term) ||
+            c.TaxNo.ToLower().Contains(term));
+
+        return _mapper.Map<IEnumerable<CustomerDto>>(filtered);
+    }
+
     public async Task<CustomerDto?> GetByIdAsync(int id)
     {
         var customer = await _repository.GetByIdAsync(id);
