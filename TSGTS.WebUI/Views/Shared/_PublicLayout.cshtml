@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Servis Takip</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body style="background: linear-gradient(135deg,#f8fafc,#e5e7eb);">
+    <div class="container py-4" style="max-width: 1100px;">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <a class="fw-bold text-primary text-decoration-none" href="/">Servis Takip</a>
+            <span class="text-muted small">Servis kodu ile durum sorgulama</span>
+        </div>
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

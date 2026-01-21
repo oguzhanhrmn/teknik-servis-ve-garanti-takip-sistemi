@@ -40,6 +40,13 @@ public class TicketManager : ITicketService
         entity.CreatedDate = DateTime.UtcNow;
         await _repository.AddAsync(entity);
         await _repository.SaveChangesAsync();
+
+        if (string.IsNullOrWhiteSpace(entity.ServiceCode))
+        {
+            entity.ServiceCode = $"SRV-{DateTime.UtcNow:yyyy}-{entity.Id:D5}";
+            _repository.Update(entity);
+            await _repository.SaveChangesAsync();
+        }
         return _mapper.Map<ServiceTicketDto>(entity);
     }
 

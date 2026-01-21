@@ -183,6 +183,10 @@ public class TsgtsDbContext : DbContext
 
         modelBuilder.Entity<ServiceTicket>()
             .ToTable("ServisKayitlari")
+            .Property(t => t.ServiceCode)
+            .HasColumnName("ServisKodu")
+            .HasMaxLength(50);
+        modelBuilder.Entity<ServiceTicket>()
             .Property(t => t.Description)
             .HasColumnName("Aciklama")
             .HasMaxLength(1000);

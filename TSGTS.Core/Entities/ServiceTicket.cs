@@ -8,6 +8,7 @@ public class ServiceTicket
     public int OpenedByUserId { get; set; }
     public int StatusId { get; set; }
     public DateTime CreatedDate { get; set; }
+    public string? ServiceCode { get; set; }
     public string? Description { get; set; }
 
     public Customer? Customer { get; set; }

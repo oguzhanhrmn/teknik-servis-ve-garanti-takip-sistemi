@@ -48,6 +48,17 @@ public class CustomerManager : ICustomerService
 
     public async Task<CustomerDto> CreateAsync(CustomerCreateDto dto)
     {
+        var phone = dto.Phone?.Trim();
+        var lowerEmail = dto.Email?.Trim().ToLowerInvariant();
+
+        // Aynı telefon veya e-posta ile kayıtlı müşteri varsa tekrar ekleme.
+        var existing = (await _repository.FindAsync(c =>
+            (phone != null && c.Phone == phone) ||
+            (lowerEmail != null && c.Email.ToLower() == lowerEmail)))
+            .FirstOrDefault();
+        if (existing is not null)
+            return _mapper.Map<CustomerDto>(existing);
+
         var entity = _mapper.Map<Customer>(dto);
         await _repository.AddAsync(entity);
         await _repository.SaveChangesAsync();

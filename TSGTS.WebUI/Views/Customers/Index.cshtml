@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TSGTS.Core.DTOs.CustomerDto>
+@model IEnumerable<TSGTS.Core.DTOs.CustomerDto>
 @{
     ViewData["Title"] = "Müşteriler";
 }
@@ -39,8 +39,8 @@
                     <td>@item.Email</td>
                     <td>@item.TaxNo</td>
                     <td class="text-end">
-                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Id">Düzenle</a>
                         <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Silinsin mi?');">Sil</button>
                         </form>
                     </td>
@@ -61,6 +61,8 @@
                 const resp = await fetch(`/api/customers/search?q=${encodeURIComponent(term)}`, { credentials: "include" });
                 if (!resp.ok) return;
                 const data = await resp.json();
+                const tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
+                const token = tokenInput ? tokenInput.value : "";
                 tbody.innerHTML = data.map(c => `
                     <tr>
                         <td>${c.firstName ?? ""}</td>
@@ -69,8 +71,9 @@
                         <td>${c.email ?? ""}</td>
                         <td>${c.taxNo ?? ""}</td>
                         <td class="text-end">
-                            <a class="btn btn-sm btn-outline-secondary" href="/Customers/Edit/${c.id}">Düzenle</a>
-                            <form action="/Customers/Delete/${c.id}" method="post" class="d-inline">
+                            <form action="/Customers/Delete" method="post" class="d-inline">
+                                ${token ? `<input type="hidden" name="__RequestVerificationToken" value="${token}" />` : ""}
+                                <input type="hidden" name="id" value="${c.id}" />
                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Silinsin mi?');">Sil</button>
                             </form>
                         </td>

@@ -1,0 +1,225 @@
+@model TSGTS.WebUI.Models.TrackLookupViewModel
+@{
+    ViewData["Title"] = "Servis Takip";
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
+}
+
+<style>
+    .track-card { border: none; border-radius: 16px; box-shadow: 0 14px 40px rgba(15,23,42,0.08); background: #fff; }
+    .track-title { font-size: 22px; font-weight: 700; color: #0f172a; }
+    .track-label { font-size: 14px; color: #6b7280; margin-bottom: 4px; }
+    .track-value { font-size: 16px; font-weight: 600; color: #111827; }
+    .track-badge { font-size: 14px; padding: 6px 10px; border-radius: 10px; color: #fff; }
+    .track-hero { background: linear-gradient(135deg,#2563eb,#0ea5e9); color: #fff; border-radius: 16px; padding: 18px 20px; box-shadow: 0 12px 32px rgba(37,99,235,0.18); }
+    .muted { color: #6b7280; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:12px; font-size:13px; font-weight:600; }
+</style>
+
+<div class="track-hero mb-3">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+            <div class="track-title text-white mb-1">Servis Takip</div>
+            <div class="text-white-50">Servis kodu ve kayıtlı iletişim bilginizle durumunuzu görüntüleyin.</div>
+        </div>
+    </div>
+    <form asp-action="Index" method="post" class="row g-3 mt-3">
+        <div class="col-md-4">
+            <label asp-for="ServiceNumber" class="form-label text-white-50"></label>
+            <input asp-for="ServiceNumber" class="form-control form-control-lg" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Contact" class="form-label text-white-50"></label>
+            <input asp-for="Contact" class="form-control form-control-lg" placeholder="Telefon veya e-posta" />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-light w-100 btn-lg">Sorgula</button>
+        </div>
+        @Html.AntiForgeryToken()
+    </form>
+    @if (!string.IsNullOrWhiteSpace(Model.Error))
+    {
+        <div class="alert alert-warning mt-3 mb-0" role="alert">
+            @Model.Error
+        </div>
+    }
+</div>
+
+@if (Model.Result is not null)
+{
+    var r = Model.Result;
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card h-100 track-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <div class="track-label">Servis No</div>
+                            <div class="track-value">@r.ServiceCode</div>
+                        </div>
+                        @{
+                            var statusColor = (r.StatusName?.ToLower().Contains("hazır") == true) ? "#16a34a" : "#6b7280";
+                        }
+                        <span class="track-badge" style="background:@statusColor;">@r.StatusName</span>
+                    </div>
+                    <div class="mb-2">
+                        <div class="track-label">Müşteri</div>
+                        <div class="track-value">@r.CustomerName</div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="track-label">Cihaz</div>
+                        <div class="track-value">
+                            @(string.Join(" - ", new[] { r.DeviceBrand, r.DeviceModel }.Where(x => !string.IsNullOrWhiteSpace(x))))
+                            (@r.DeviceSerial)
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="track-label">Oluşturma</div>
+                        <div class="track-value">@r.CreatedDate.ToString("dd.MM.yyyy HH:mm")</div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="track-label">Garanti</div>
+                        <div class="track-value d-flex flex-column gap-1">
+                            <span>@r.WarrantyStatus</span>
+                            @if (r.WarrantyStartDate.HasValue)
+                            {
+                                <small class="muted">Başlangıç: @r.WarrantyStartDate.Value.ToString("dd.MM.yyyy")</small>
+                            }
+                            @if (r.WarrantyEndDate.HasValue)
+                            {
+                                <small class="muted">Bitiş: @r.WarrantyEndDate.Value.ToString("dd.MM.yyyy")</small>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(r.WarrantyRemainingText))
+                            {
+                                <span class="pill text-success bg-success bg-opacity-10">@r.WarrantyRemainingText</span>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <div class="track-label">Açıklama</div>
+                        <div class="track-value" style="font-weight:500;">@r.Description</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card h-100 track-card">
+                <div class="card-body">
+                    <h6 class="card-title" style="font-size:18px;">Durum Tarihçesi / İşlemler</h6>
+                    @if (r.Logs.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%;">Tarih</th>
+                                        <th>İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var log in r.Logs)
+                                {
+                                    <tr>
+                                        <td style="font-weight:600; color:#111827;">@log.Timestamp.ToString("dd.MM.yyyy HH:mm")</td>
+                                        <td style="font-size:15px;">@log.ActionDescription</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">Herhangi bir işlem kaydı yok.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-2">
+        <div class="col-md-6">
+            <div class="card h-100 track-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                        <h6 class="card-title mb-0" style="font-size:18px;">Ücret / Fatura Özeti</h6>
+                        <div class="d-flex gap-2">
+                            <span class="pill bg-primary text-white">Fatura: @r.InvoiceTotal.ToString("C")</span>
+                            <span class="pill bg-secondary text-white">Parça: @r.PartsTotal.ToString("C")</span>
+                        </div>
+                    </div>
+                    <div class="muted mb-2">Fatura edilen tutar ve parça kullanımı toplamı</div>
+                    @if (r.Invoices.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var inv in r.Invoices)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>@inv.InvoiceDate.ToString("dd.MM.yyyy")</span>
+                                    <strong>@inv.FinalAmount.ToString("C")</strong>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="text-muted">Bu kayda ait fatura bulunmuyor.</div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100 track-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="card-title mb-0" style="font-size:18px;">Parça Kullanımı</h6>
+                        <span class="pill bg-secondary text-white">@r.PartsTotal.ToString("C")</span>
+                    </div>
+                    <div class="muted mb-2">Kullanılan yedek parça ve miktar bilgisi</div>
+                    @if (r.Parts.Any())
+                    {
+                        <div class="alert alert-info py-2 px-3">
+                            Görünen toplam tutar: @((r.InvoiceTotal + r.PartsTotal).ToString("C"))
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0 align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Parça</th>
+                                        <th class="text-end">Miktar</th>
+                                        <th class="text-end">Birim</th>
+                                        <th class="text-end">Tutar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var p in r.Parts)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="fw-semibold">@p.PartName</div>
+                                            @if (!string.IsNullOrWhiteSpace(p.PartCode))
+                                            {
+                                                <div class="muted">Kod: @p.PartCode</div>
+                                            }
+                                        </td>
+                                        <td class="text-end">@p.Quantity</td>
+                                        <td class="text-end">@p.UnitPrice.ToString("C")</td>
+                                        <td class="text-end">@p.LineTotal.ToString("C")</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">Kullanılan parça bilgisi yok.</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

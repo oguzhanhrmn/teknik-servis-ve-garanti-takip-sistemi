@@ -1,0 +1,102 @@
+@model TSGTS.WebUI.Models.QuickTicketViewModel
+@{
+    ViewData["Title"] = "Servis Kaydı Oluştur";
+}
+
+<div class="card mb-3">
+    <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+            <h4 class="mb-1">Servis Kaydı Oluştur</h4>
+            <div class="text-muted">Tek formda müşteri + cihaz + servis kaydı oluştur.</div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(Model.CreatedServiceCode))
+        {
+            <div class="alert alert-success mb-0">
+                Servis kodu oluşturuldu: <strong>@Model.CreatedServiceCode</strong>
+            </div>
+        }
+    </div>
+</div>
+
+<form asp-action="QuickCreate" method="post" class="card">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-12"><h6 class="text-muted">Müşteri Bilgileri</h6></div>
+            <div class="col-md-4">
+                <label asp-for="CustomerFirstName" class="form-label"></label>
+                <input asp-for="CustomerFirstName" class="form-control" />
+                <span asp-validation-for="CustomerFirstName" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="CustomerLastName" class="form-label"></label>
+                <input asp-for="CustomerLastName" class="form-control" />
+                <span asp-validation-for="CustomerLastName" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="CustomerPhone" class="form-label"></label>
+                <input asp-for="CustomerPhone" class="form-control" />
+                <span asp-validation-for="CustomerPhone" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CustomerEmail" class="form-label"></label>
+                <input asp-for="CustomerEmail" class="form-control" />
+                <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="CustomerTaxNo" class="form-label"></label>
+                <input asp-for="CustomerTaxNo" class="form-control" />
+                <span asp-validation-for="CustomerTaxNo" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="CustomerAddress" class="form-label"></label>
+                <input asp-for="CustomerAddress" class="form-control" />
+                <span asp-validation-for="CustomerAddress" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 mt-2"><h6 class="text-muted">Cihaz Bilgileri</h6></div>
+            <div class="col-md-4">
+                <label asp-for="DeviceSerial" class="form-label"></label>
+                <input asp-for="DeviceSerial" class="form-control" />
+                <span asp-validation-for="DeviceSerial" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="BrandId" class="form-label"></label>
+                <select asp-for="BrandId" class="form-select" asp-items="@(ViewBag.Brands as List<SelectListItem>)"></select>
+                <span asp-validation-for="BrandId" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="ModelId" class="form-label"></label>
+                <select asp-for="ModelId" class="form-select" asp-items="@(ViewBag.Models as List<SelectListItem>)"></select>
+                <span asp-validation-for="ModelId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="PurchaseDate" class="form-label"></label>
+                <input asp-for="PurchaseDate" class="form-control" type="date" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="WarrantyEndDate" class="form-label"></label>
+                <input asp-for="WarrantyEndDate" class="form-control" type="date" />
+            </div>
+
+            <div class="col-12 mt-2"><h6 class="text-muted">Servis Kaydı</h6></div>
+            <div class="col-md-4">
+                <label asp-for="StatusId" class="form-label"></label>
+                <select asp-for="StatusId" class="form-select" asp-items="@(ViewBag.Statuses as List<SelectListItem>)"></select>
+                <span asp-validation-for="StatusId" class="text-danger"></span>
+            </div>
+            <div class="col-12">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-end">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">İptal</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

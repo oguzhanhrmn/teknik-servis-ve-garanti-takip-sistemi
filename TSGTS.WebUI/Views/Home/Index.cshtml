@@ -44,10 +44,47 @@
 
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title mb-3">Durum Dağılımı</h5>
+        <div class="d-flex align-items-center justify-content-between">
+            <h5 class="card-title mb-0">Servis Durum Dağılımı</h5>
+            <small class="text-muted">Servis kayıtlarına göre</small>
+        </div>
         <canvas id="statusChart" height="120"></canvas>
     </div>
 </div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h5 class="card-title mb-3">Son Servis Kayıtları</h5>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Müşteri</th>
+                        <th>Cihaz</th>
+                        <th>Durum</th>
+                        <th>Tarih</th>
+                        <th>Açıklama</th>
+                    </tr>
+                </thead>
+                <tbody id="recentTicketsBody">
+                    <tr><td colspan="6" class="text-muted">Yükleniyor...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h5 class="card-title mb-3">Kritik Parçalar</h5>
+        <ul class="list-group" id="lowStockList">
+            <li class="list-group-item text-muted">Yükleniyor...</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Gelir trende/iş yükü kaldırıldı -->
 
 @section Scripts {
     <script>
@@ -70,8 +107,12 @@
                 document.getElementById("stat-totalCustomers").innerText = data.totalCustomers ?? "-";
                 document.getElementById("stat-totalDevices").innerText = data.totalDevices ?? "-";
 
-                const labels = data.statusCounts.map(s => "Durum " + s.statusId);
+                const labels = data.statusCounts.map(s => s.statusName ?? ("Durum " + s.statusId));
                 const values = data.statusCounts.map(s => s.count);
+                const colors = data.statusCounts.map((s, idx) =>
+                    s.colorCode && /^#([0-9A-Fa-f]{3}){1,2}$/.test(s.colorCode)
+                        ? s.colorCode
+                        : ["#2563eb", "#f1c40f", "#9b59b6", "#2ecc71", "#95a5a6", "#e74c3c"][idx % 6]);
 
                 const ctx = document.getElementById("statusChart");
                 new Chart(ctx, {
@@ -80,7 +121,7 @@
                         labels,
                         datasets: [{
                             data: values,
-                            backgroundColor: ["#3498db", "#f1c40f", "#9b59b6", "#2ecc71", "#95a5a6", "#e74c3c"]
+                            backgroundColor: colors
                         }]
                     },
                     options: {
@@ -91,6 +132,40 @@
                         }
                     }
                 });
+
+                const tbody = document.getElementById("recentTicketsBody");
+                if (data.recentTickets && data.recentTickets.length) {
+                    tbody.innerHTML = data.recentTickets.map(t => {
+                        const statusBadge = `<span class="badge" style="background:${t.statusColor ?? '#2563eb'};">${t.statusName}</span>`;
+                        const created = t.createdDate ? new Date(t.createdDate).toLocaleString('tr-TR') : "";
+                        const desc = t.description ? t.description : "";
+                        return `<tr>
+                            <td>${t.id}</td>
+                            <td>${t.customer}</td>
+                            <td>${t.device}</td>
+                            <td>${statusBadge}</td>
+                            <td>${created}</td>
+                            <td>${desc}</td>
+                        </tr>`;
+                    }).join("");
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-muted">Kayıt bulunamadı</td></tr>`;
+                }
+
+                const lowStockList = document.getElementById("lowStockList");
+                if (data.lowStockParts && data.lowStockParts.length) {
+                    lowStockList.innerHTML = data.lowStockParts.map(p => `
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="fw-semibold">${p.partName}</div>
+                                <small class="text-muted">${p.partCode}</small>
+                            </div>
+                            <span class="badge text-bg-danger">Stok: ${p.stockQuantity} / Kritik: ${p.criticalLevel}</span>
+                        </li>
+                    `).join("");
+                } else {
+                    lowStockList.innerHTML = `<li class="list-group-item text-muted">Kritik seviyede parça yok</li>`;
+                }
             } catch (err) {
                 console.error(err);
             }

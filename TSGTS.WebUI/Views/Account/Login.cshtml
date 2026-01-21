@@ -2,25 +2,55 @@
 @{
     ViewData["Title"] = "Giriş Yap";
     var returnUrl = ViewData["ReturnUrl"] as string;
+    Layout = "~/Views/Shared/_PublicLayout.cshtml";
 }
 
-<h2>Giriş Yap</h2>
-<hr />
+<style>
+    .login-card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 16px 48px rgba(15,23,42,0.10);
+        overflow: hidden;
+    }
+    .login-hero {
+        background: linear-gradient(135deg,#2563eb,#0ea5e9);
+        color: #fff;
+        padding: 28px;
+    }
+    .login-form {
+        padding: 24px;
+        background: #fff;
+    }
+</style>
 
-<form asp-action="Login" method="post">
-    <input type="hidden" name="returnUrl" value="@returnUrl" />
-    <div class="mb-3">
-        <label asp-for="Username" class="form-label"></label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
+<div class="card login-card mb-4">
+    <div class="row g-0">
+        <div class="col-md-5 login-hero d-flex align-items-center">
+            <div>
+                <h3 class="fw-bold mb-2">Yönetim Paneli</h3>
+                <p class="mb-0 text-white-50">Lütfen kullanıcı adı ve şifrenizle giriş yapın.</p>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="login-form">
+                <form asp-action="Login" method="post">
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    <div class="mb-3">
+                        <label asp-for="Username" class="form-label"></label>
+                        <input asp-for="Username" class="form-control form-control-lg" placeholder="Kullanıcı adı" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control form-control-lg" placeholder="Şifre" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 btn-lg">Giriş</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Giriş</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

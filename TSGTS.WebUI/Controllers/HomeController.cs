@@ -15,7 +15,14 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        return View("Landing");
+    }
+
+    [HttpGet]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    public IActionResult Dashboard()
+    {
+        return View("Index"); // dashboard
     }
 
     public IActionResult Privacy()
