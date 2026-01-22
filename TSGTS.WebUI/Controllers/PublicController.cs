@@ -95,9 +95,21 @@ public class PublicController : Controller
             }).ToList() ?? new List<PublicInvoiceViewModel>();
 
         var invoiceTotal = invoices.Sum(i => i.FinalAmount);
-        var warrantyStart = ticket.CreatedDate;
-        var warrantyEnd = warrantyStart.AddYears(2);
-        var warrantyInfo = GetWarrantyStatus(warrantyStart, warrantyEnd);
+
+        // Servis garantisi: kayıt oluşturma + 2 yıl
+        var serviceWarrantyStart = ticket.CreatedDate;
+        var serviceWarrantyEnd = serviceWarrantyStart.AddYears(2);
+        var serviceWarrantyInfo = GetWarrantyStatus(serviceWarrantyStart, serviceWarrantyEnd);
+
+        // Üretici/cihaz garantisi: cihaz satın alma tarihi ve/veya cihaz garanti bitiş tarihi
+        DateTime? purchaseDate = ticket.Device?.PurchaseDate;
+        DateTime? deviceWarrantyEnd = ticket.Device?.WarrantyEndDate;
+        // Eğer garanti bitiş yok ama satın alma varsa, 2 yıl ekleyelim
+        if (!deviceWarrantyEnd.HasValue && purchaseDate.HasValue)
+            deviceWarrantyEnd = purchaseDate.Value.AddYears(2);
+
+        var deviceWarrantyInfo = GetWarrantyStatus(purchaseDate, deviceWarrantyEnd);
+
         var parts = ticket.PartUsages?
             .OrderByDescending(p => p.UsedDate)
             .Select(p => new PublicPartUsageViewModel
@@ -136,6 +148,7 @@ public class PublicController : Controller
             Id = ticket.Id,
             ServiceCode = ticket.ServiceCode ?? ticket.Id.ToString(),
             CustomerName = $"{ticket.Customer?.FirstName} {ticket.Customer?.LastName}".Trim(),
+            PurchaseDate = purchaseDate,
             DeviceSerial = ticket.Device?.SerialNumber ?? "-",
             DeviceBrand = ticket.Device?.Brand?.BrandName,
             DeviceModel = ticket.Device?.Model?.ModelName,
@@ -143,10 +156,12 @@ public class PublicController : Controller
             StatusColor = ticket.Status?.ColorCode,
             Description = ticket.Description,
             CreatedDate = ticket.CreatedDate,
-            WarrantyStartDate = warrantyStart,
-            WarrantyEndDate = warrantyEnd,
-            WarrantyStatus = warrantyInfo.StatusText,
-            WarrantyRemainingText = warrantyInfo.RemainingText,
+            WarrantyStartDate = serviceWarrantyStart,
+            WarrantyEndDate = serviceWarrantyEnd,
+            WarrantyStatus = serviceWarrantyInfo.StatusText,
+            WarrantyRemainingText = serviceWarrantyInfo.RemainingText,
+            DeviceWarrantyStatus = deviceWarrantyInfo.StatusText,
+            DeviceWarrantyRemainingText = deviceWarrantyInfo.RemainingText,
             InvoiceTotal = invoiceTotal,
             PartsTotal = partsTotal,
             Invoices = invoices,
@@ -170,11 +185,15 @@ public class PublicController : Controller
         return trimmed.ToLowerInvariant();
     }
 
-    private (string StatusText, string RemainingText) GetWarrantyStatus(DateTime warrantyStart, DateTime warrantyEnd)
+    private (string StatusText, string RemainingText) GetWarrantyStatus(DateTime? warrantyStart, DateTime? warrantyEnd)
     {
+        if (!warrantyStart.HasValue && !warrantyEnd.HasValue)
+            return ("Garanti bilgisi yok", string.Empty);
+
         var today = DateTime.Today;
-        var start = warrantyStart.Date;
-        var end = warrantyEnd.Date;
+        var start = warrantyStart ?? warrantyEnd;
+        var end = warrantyEnd ?? warrantyStart?.AddYears(2) ?? today;
+
         if (end >= today)
         {
             var daysLeft = (end - today).Days;

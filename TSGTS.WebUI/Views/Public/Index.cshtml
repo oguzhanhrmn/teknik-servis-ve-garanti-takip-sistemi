@@ -77,7 +77,7 @@
                         <div class="track-value">@r.CreatedDate.ToString("dd.MM.yyyy HH:mm")</div>
                     </div>
                     <div class="mb-2">
-                        <div class="track-label">Garanti</div>
+                        <div class="track-label">Servis Garantisi (2 yıl)</div>
                         <div class="track-value d-flex flex-column gap-1">
                             <span>@r.WarrantyStatus</span>
                             @if (r.WarrantyStartDate.HasValue)
@@ -91,6 +91,20 @@
                             @if (!string.IsNullOrWhiteSpace(r.WarrantyRemainingText))
                             {
                                 <span class="pill text-success bg-success bg-opacity-10">@r.WarrantyRemainingText</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <div class="track-label">Ürün Garantisi (Satın Alma Bazlı)</div>
+                        <div class="track-value d-flex flex-column gap-1">
+                            @if (r.PurchaseDate.HasValue)
+                            {
+                                <small class="muted">Satın Alma: @r.PurchaseDate.Value.ToString("dd.MM.yyyy")</small>
+                            }
+                            <span>@r.DeviceWarrantyStatus</span>
+                            @if (!string.IsNullOrWhiteSpace(r.DeviceWarrantyRemainingText))
+                            {
+                                <span class="pill text-success bg-success bg-opacity-10">@r.DeviceWarrantyRemainingText</span>
                             }
                         </div>
                     </div>

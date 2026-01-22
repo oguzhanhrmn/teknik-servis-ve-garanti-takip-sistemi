@@ -19,6 +19,7 @@ public class TicketPublicViewModel
     public int Id { get; set; }
     public string ServiceCode { get; set; } = string.Empty;
     public string CustomerName { get; set; } = string.Empty;
+    public DateTime? PurchaseDate { get; set; }
     public string DeviceSerial { get; set; } = string.Empty;
     public string? DeviceBrand { get; set; }
     public string? DeviceModel { get; set; }
@@ -26,10 +27,13 @@ public class TicketPublicViewModel
     public string? StatusColor { get; set; }
     public string? Description { get; set; }
     public DateTime CreatedDate { get; set; }
-    public DateTime? WarrantyStartDate { get; set; }
-    public DateTime? WarrantyEndDate { get; set; }
-    public string WarrantyStatus { get; set; } = string.Empty;
-    public string WarrantyRemainingText { get; set; } = string.Empty;
+    public DateTime? WarrantyStartDate { get; set; } // Servis garantisi başlangıcı
+    public DateTime? WarrantyEndDate { get; set; }   // Servis garantisi bitişi (+2 yıl)
+    public string WarrantyStatus { get; set; } = string.Empty; // Servis garantisi metni
+    public string WarrantyRemainingText { get; set; } = string.Empty; // Servis garantisi kalan gün
+
+    public string DeviceWarrantyStatus { get; set; } = string.Empty; // Üretici/ürün garantisi metni
+    public string DeviceWarrantyRemainingText { get; set; } = string.Empty; // Üretici garantisi kalan gün
     public decimal InvoiceTotal { get; set; }
     public decimal PartsTotal { get; set; }
     public List<PublicInvoiceViewModel> Invoices { get; set; } = new();
