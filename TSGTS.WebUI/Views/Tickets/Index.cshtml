@@ -37,7 +37,7 @@
                     <td>@item.CreatedDate.ToString("dd.MM.yyyy HH:mm")</td>
                     <td class="text-end">
                         <a class="btn btn-sm btn-outline-secondary" asp-action="Status" asp-route-id="@item.Id">Durum Güncelle</a>
-                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                        <form asp-controller="Tickets" asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Silinsin mi?');">Sil</button>
                         </form>

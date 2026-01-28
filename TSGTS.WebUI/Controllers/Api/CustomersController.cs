@@ -49,16 +49,26 @@ public async Task<IActionResult> Create([FromForm] CustomerCreateDto dto)
 
 [HttpPut("{id:int}")]
 [Consumes("application/json", "application/x-www-form-urlencoded", "multipart/form-data")]
-public async Task<IActionResult> Update(int id, [FromForm] CustomerCreateDto dto)
-{
-    var updated = await _customerService.UpdateAsync(id, dto);
-    if (updated is null)
-        return NotFound();
-    return Ok(updated);
+    public async Task<IActionResult> Update(int id, [FromForm] CustomerCreateDto dto)
+    {
+        var updated = await _customerService.UpdateAsync(id, dto);
+        if (updated is null)
+            return NotFound();
+        return Ok(updated);
     }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
+    {
+        var ok = await _customerService.DeleteAsync(id);
+        if (!ok)
+            return NotFound();
+        return NoContent();
+    }
+
+    // Bazı eski/form kaynaklı POST istekleri /api/Customers/{id} ile geldiğinde 405 olmasın diye ekledik.
+    [HttpPost("{id:int}")]
+    public async Task<IActionResult> DeleteByPost(int id)
     {
         var ok = await _customerService.DeleteAsync(id);
         if (!ok)

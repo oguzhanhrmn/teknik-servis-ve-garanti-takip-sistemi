@@ -40,8 +40,9 @@
                     <td>@item.TaxNo</td>
                     <td class="text-end">
                         <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@item.Id">Düzenle</a>
-                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline">
+                        <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline delete-form" data-id="@item.Id">
                             @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@item.Id" />
                             <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Silinsin mi?');">Sil</button>
                         </form>
                     </td>
@@ -73,7 +74,7 @@
                         <td>${c.taxNo ?? ""}</td>
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-secondary" href="/Customers/Edit/${c.id}">Düzenle</a>
-                            <form action="/Customers/Delete" method="post" class="d-inline">
+                            <form action="/Customers/Delete" method="post" class="d-inline delete-form" data-id="${c.id}">
                                 ${token ? `<input type="hidden" name="__RequestVerificationToken" value="${token}" />` : ""}
                                 <input type="hidden" name="id" value="${c.id}" />
                                 <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Silinsin mi?');">Sil</button>
@@ -88,6 +89,34 @@
                 clearTimeout(timer);
                 timer = setTimeout(() => search(input.value), 250);
             });
+
+            // Silme sonrası beklemeden satırı kaldırmak için form submit'ini yakala
+            function wireDeleteForms() {
+                document.querySelectorAll(".delete-form").forEach(form => {
+                    if (form.dataset.wired) return;
+                    form.dataset.wired = "1";
+                    form.addEventListener("submit", async (e) => {
+                        e.preventDefault();
+                        if (!confirm("Silinsin mi?")) return;
+                        const fd = new FormData(form);
+                        const resp = await fetch(form.action, {
+                            method: "POST",
+                            body: fd,
+                            credentials: "include"
+                        });
+                        if (resp.ok) {
+                            const row = form.closest("tr");
+                            if (row) row.remove();
+                        } else {
+                            alert("Silme işlemi başarısız oldu (HTTP " + resp.status + ").");
+                        }
+                    });
+                });
+            }
+
+            wireDeleteForms();
+            // Arama sonrası yeni formlar eklenirse tekrar bağla
+            input.addEventListener("input", () => setTimeout(wireDeleteForms, 300));
         });
     </script>
 }

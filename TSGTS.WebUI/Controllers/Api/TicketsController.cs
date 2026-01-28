@@ -39,6 +39,16 @@ public class TicketsController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
     }
 
+    // Eski/form kaynaklı POST /api/Tickets/{id} istekleri 405 vermesin diye eklenmiştir.
+    [HttpPost("{id:int}")]
+    public async Task<IActionResult> DeleteByPost(int id)
+    {
+        var ok = await _ticketService.DeleteAsync(id);
+        if (!ok)
+            return NotFound();
+        return NoContent();
+    }
+
     public class TicketStatusUpdateRequest
     {
         public int StatusId { get; set; }
